@@ -88,12 +88,12 @@ class ClassifiedAd
 
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups({"users"})
      */
-    private int $year;
+    private  $year;
 
     /**
      * @ORM\Column(type="integer")
@@ -117,7 +117,7 @@ class ClassifiedAd
      * @Groups({"classifiedAdById"})
      * @Groups({"users"})
      */
-    private string $typeOfVehicle;
+    private  $typeOfVehicle;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -128,20 +128,20 @@ class ClassifiedAd
     private string $gearbox;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups({"users"})
      */
-    private int $carDoors;
+    private $carDoors;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups({"users"})
      */
-    private int $places;
+    private $places;
 
 
     /**
@@ -203,12 +203,12 @@ class ClassifiedAd
     private int $maxPower;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups ({"users"})
      */
-    private int $power;
+    private  $power;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="ClassifiedAd",cascade={"persist"})
@@ -495,33 +495,33 @@ class ClassifiedAd
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getCarDoors(): int
+    public function getCarDoors()
     {
         return $this->carDoors;
     }
 
     /**
-     * @param int $carDoors
+     * @param mixed $carDoors
      */
-    public function setCarDoors(int $carDoors): void
+    public function setCarDoors($carDoors): void
     {
         $this->carDoors = $carDoors;
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getPlaces(): int
+    public function getPlaces()
     {
         return $this->places;
     }
 
     /**
-     * @param int $places
+     * @param mixed $places
      */
-    public function setPlaces(int $places): void
+    public function setPlaces($places): void
     {
         $this->places = $places;
     }
@@ -639,17 +639,17 @@ class ClassifiedAd
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getPower(): int
+    public function getPower()
     {
         return $this->power;
     }
 
     /**
-     * @param int $power
+     * @param mixed $power
      */
-    public function setPower(int $power): void
+    public function setPower($power): void
     {
         $this->power = $power;
     }
@@ -765,7 +765,6 @@ class ClassifiedAd
     {
         $this->updatedOnAt = $updatedOnAt;
     }
-
 
 
     }

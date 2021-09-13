@@ -41,7 +41,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/show/{id}", name="admin_show_user",methods={"POST"})
+     * @Route("/show/{id}", name="admin_show_user",methods={"GET"})
      *
      */
     public function show(User $user, $id): Response
@@ -63,7 +63,6 @@ class AdminController extends AbstractController
 
 
 //Création uniquement pour l'admin
-
     /**
      * @Route("/register", name="admin_register",methods={"POST"})
      */
@@ -99,29 +98,42 @@ class AdminController extends AbstractController
 
     /**
      * //Update uniquement pour l'admin
-     * @Route("/edit/{id}", name="admin_update_user",methods={"PATCH"}, requirements={"id":"\d+"})
+     * @Route("/edit/{id}", name="admin_update_user", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function edit(Request                     $req, SerializerInterface $serializer, EMI $manager,
-                         UserPasswordHasherInterface $hasher, $id): Response
+    public function edit(Request $req, SerializerInterface $serializer, EMI $manager,
+                         UserPasswordHasherInterface $hasher,User $user, $id): Response
     {
         if (!$this->getUser()) {
             return $this->json(["message" => "Desolé mais vous n'avez pas acces a cette page !"], 200, []);
         }
-        $user = $this->getUser();
-        $isAdmin = in_array("ROLE_ADMIN", $user->getRoles(), true);
+        $currentUser = $this->getUser();
+
+        $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
         //seulement un admin peut avoir acces a ce controller
         if ($isAdmin) {
             $jsonUser = $req->getContent();
-            $user = $serializer->deserialize($jsonUser, User::class, 'json');
-            $hashedPassword = $hasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($hashedPassword);
+            $userEdit = $serializer->deserialize($jsonUser, User::class, 'json');
+            //$hashedPassword = $hasher->hashPassword($user, $user->getPassword());
+            //$user->setPassword($hashedPassword);
+            $user->setTitle($userEdit->getTitle());
+            $user->setFirstName($userEdit->getfirstName());
+            $user->setLastName($userEdit->getLastName());
+            $user->setFirstname($userEdit->getUsername());
+            $user->setEmail($userEdit->getEmail());
+            $user->setPhoneNumber($userEdit->getPhoneNumber());
+            $user->setSiret($userEdit->getSiret());
+            if(!empty($userEdit->getPassword()) && !$userEdit->getPassword()==""){
+                if($userEdit->getPassword() ===$userEdit->getPasswordConfirm())
+                {
+                    $user->setPaswword($userEdit->getPaswword());
+                    $user->setPaswwordConfirm($userEdit->getPaswwordConfirm());
+                }else{
+                    return $this->json(["message" => "Les mots de passe doivent correspondre!"]);
+                }
+            }
             $user->setUpdatedOn(new DateTime());
             $user->setdateOfRegistration(new DateTime());
-            //only an
-            if (!$isAdmin) {
-                //On set le role user manuellement dans le cas d'un non-admin pour se proterger d'evetuel hack json
-                $user->setRoles(["ROLE_USER"]);
-            }
+            $user->setRoles(["ROLE_USER"]);
             $manager->persist($user);
             $manager->flush();
             $message = ["message" => "Utilisateur mis a jour!"];

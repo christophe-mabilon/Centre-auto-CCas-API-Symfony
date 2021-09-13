@@ -53,7 +53,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
+     * * @Assert\NotBlank()
      * @Assert\Length(
      *      min = 4,
      *      max = 16,
@@ -83,6 +83,14 @@ class User implements UserInterface
      *
      */
     private string $email;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Groups ({"users"})
+     * @Groups ({"users-details"})
+     */
+    private string $title;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -422,5 +430,21 @@ class User implements UserInterface
 
     public function getUser(array $toArray)
     {
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 }

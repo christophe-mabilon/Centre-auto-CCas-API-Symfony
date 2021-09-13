@@ -80,6 +80,7 @@ class GarageController extends AbstractController
         if (!$this->getUser()) {
             return $this->json(["message" => "Désolé vous n avez pas acces a cette information !"], 200);
         }
+
         //get garage user et id garage
         $isAdmin = in_array("ROLE_ADMIN", $this->getUser()->getRoles(), true);
         if ($isAdmin || (string)$this->getUser()->getId() === $userId) {
@@ -105,7 +106,7 @@ class GarageController extends AbstractController
     /**
      * @Route("/garage/update/{id}", name="update_garage", methods={"PATCH"}, requirements={"id":"\d+"})
      */
-    public function update(Request  $req, Garage $garage, UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
+    public function update(Request                $req, Garage $garage, UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
                            EntityManagerInterface $manager, $id): Response
     {
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
@@ -150,14 +151,31 @@ class GarageController extends AbstractController
             return $this->json(["Désolé vous n avez pas acces a cette information !", 200, []]);
         }
 
-        $isAdmin = in_array("ROLE_ADMIN", $this->getUser()->getRoles(),true);
+        $isAdmin = in_array("ROLE_ADMIN", $this->getUser()->getRoles(), true);
         if ($isAdmin) {
             $totalGarage = count($repo->findAll());
-        }
-        else{
+        } else {
             $totalGarage = count($repo->findBy(["user" => $this->getUser()->getId()]));
         }
         return $this->json($totalGarage, 200, []);
+    }
+
+    /**
+     * @Route("/photos/", name="photos", methods={"POST"})
+     *
+     */
+    public function getPhotos(Request $req,GarageRepository $garageRepo,Garage $garage )
+    {
+
+        if (!$this->getUser()) {
+            return $this->json(["Désolé vous n avez pas acces a cette information !", 200, []]);
+        }
+
+        $isAdmin = in_array("ROLE_ADMIN", $this->getUser()->getRoles(), true);
+
+        $formulaire = $this->createForm(FestivalType::class, $garage);
+        $formulaire->handleRequest($req);
+        $imageEnvoyee = $formulaire->get('url')->getData(); dd($imageEnvoyee);
     }
 }
 

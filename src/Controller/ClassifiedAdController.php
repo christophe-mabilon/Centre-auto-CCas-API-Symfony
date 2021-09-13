@@ -94,7 +94,8 @@ class ClassifiedAdController extends AbstractController
             return $this->json(["Désolé vous n avez pas acces a cette information !", 200, []]);
         }
         $isAdmin = in_array("ROLE_ADMIN", $this->getUser()->getRoles(), true);
-        if ($isAdmin && $this->getUser()) {
+
+        if ($isAdmin || $this->getUser()) {
             $classifiedAdJson = $req->getContent();
             $classifiedAd = $serializer->deserialize($classifiedAdJson, ClassifiedAd::class, 'json');
             $brand = $brandRepo->findOneBy(["id" => $req->toArray('brand')]);
