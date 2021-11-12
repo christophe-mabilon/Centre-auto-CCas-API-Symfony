@@ -21,7 +21,6 @@ class AuthController extends AbstractController
     {   if(!$this->getUser() ) {
         return $this->json(["message" => "Identifiants Incorrect !"], 200, []);
     }
-
         return $this->json(["message" =>"bienvenue"], 200,["groups"=> "users"]);
     }
 

@@ -33,7 +33,7 @@ class User implements UserInterface
     private int $id;
 
     /**
-     * @Groups({"classifiedAdById"})
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Unique(message="Ce nom d'utilisateur est déja pris!")
@@ -44,6 +44,7 @@ class User implements UserInterface
      *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
      * )
      * @Groups({"classifiedAd"})
+     * @Groups({"classifiedAdById"})
      * @Groups ({"users"})
      * @Groups ({"users-details"})
      * @Groups ({"garages"})
@@ -72,6 +73,50 @@ class User implements UserInterface
      *
      */
     private ?string $passwordConfirm;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     * @Assert\Unique
+     * @Groups ({"users"})
+     * @Groups ({"users-details"})
+     *
+     */
+    private string $society;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     * @Assert\Unique
+     * @Groups ({"users"})
+     * @Groups ({"users-details"})
+     *
+     */
+    private string $adresse;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     * @Assert\Unique
+     * @Groups ({"users"})
+     * @Groups ({"users-details"})
+     *
+     */
+    private string $codePostal;
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     * @Assert\Unique
+     * @Groups ({"users"})
+     * @Groups ({"users-details"})
+     *
+     */
+    private string $ville;
+
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -129,6 +174,7 @@ class User implements UserInterface
      * @ORM\Column(type="datetime", nullable=false)
      * @Assert\NotBlank()
      * @Groups ({"users"})
+     * @Groups ({"users-details"})
      */
     private DateTimeInterface $dateOfRegistration;
 
@@ -413,9 +459,10 @@ class User implements UserInterface
     }
 
 
-    public function getSalt()
+    public function getSalt():string
     {
-        // TODO: Implement getSalt() method.
+        $salt = "le_sel_de_mon_application";
+        return $salt;
     }
 
     public function eraseCredentials()
@@ -446,5 +493,85 @@ class User implements UserInterface
     public function setTitle(string $title): void
     {
         $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSiege(): string
+    {
+        return $this->siege;
+    }
+
+    /**
+     * @param string $siege
+     */
+    public function setSiege(string $siege): void
+    {
+        $this->siege = $siege;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdresse(): string
+    {
+        return $this->adresse;
+    }
+
+    /**
+     * @param string $adresse
+     */
+    public function setAdresse(string $adresse): void
+    {
+        $this->adresse = $adresse;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCodePostal(): string
+    {
+        return $this->codePostal;
+    }
+
+    /**
+     * @param string $codePostal
+     */
+    public function setCodePostal(string $codePostal): void
+    {
+        $this->codePostal = $codePostal;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVille(): string
+    {
+        return $this->ville;
+    }
+
+    /**
+     * @param string $ville
+     */
+    public function setVille(string $ville): void
+    {
+        $this->ville = $ville;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSociety(): string
+    {
+        return $this->society;
+    }
+
+    /**
+     * @param string $society
+     */
+    public function setSociety(string $society): void
+    {
+        $this->society = $society;
     }
 }

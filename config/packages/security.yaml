@@ -20,6 +20,7 @@ security:
             pattern: ^/api/token/refresh
             provider: user_in_database
             stateless: true
+
         login:
             pattern: ^/api/login
             stateless: true
@@ -37,8 +38,6 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
-
-
         main:
             lazy: true
             provider: user_in_database

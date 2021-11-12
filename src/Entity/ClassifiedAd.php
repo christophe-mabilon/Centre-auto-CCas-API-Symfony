@@ -92,14 +92,28 @@ class ClassifiedAd
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups({"users"})
+     * @Groups ({"users-details"})
      */
     private  $year;
+
+    /**
+     *
+     * @var integer
+     */
+    private int $maxKilometre;
+
+    /**
+     *
+     * @var integer
+     */
+    private int $minKilometre;
 
     /**
      * @ORM\Column(type="integer")
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups({"users"})
+     * @Groups ({"users-details"})
      */
     private int $kilometre;
 
@@ -108,6 +122,7 @@ class ClassifiedAd
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups({"users"})
+     * @Groups ({"users-details"})
      */
     private string $fuel;
 
@@ -116,6 +131,7 @@ class ClassifiedAd
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups({"users"})
+     * @Groups ({"users-details"})
      */
     private  $typeOfVehicle;
 
@@ -124,6 +140,7 @@ class ClassifiedAd
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups({"users"})
+     * @Groups ({"users-details"})
      */
     private string $gearbox;
 
@@ -132,6 +149,7 @@ class ClassifiedAd
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups({"users"})
+     * @Groups ({"users-details"})
      */
     private $carDoors;
 
@@ -140,6 +158,7 @@ class ClassifiedAd
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups({"users"})
+     * @Groups ({"users-details"})
      */
     private $places;
 
@@ -158,6 +177,7 @@ class ClassifiedAd
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups ({"users"})
+     * @Groups ({"users-details"})
      */
     private  $model;
 
@@ -168,6 +188,7 @@ class ClassifiedAd
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups ({"users"})
+     * @Groups ({"users-details"})
      */
     private string $modelComplement;
 
@@ -177,6 +198,7 @@ class ClassifiedAd
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups ({"users"})
+     * @Groups ({"users-details"})
      */
     private string $modelComplement2;
 
@@ -187,6 +209,7 @@ class ClassifiedAd
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups ({"users"})
+     * @Groups ({"users-details"})
      */
     private  $region;
 
@@ -766,5 +789,37 @@ class ClassifiedAd
         $this->updatedOnAt = $updatedOnAt;
     }
 
-
+    /**
+     * @return int
+     */
+    public function getMaxKilometre(): int
+    {
+        return $this->maxKilometre;
     }
+
+    /**
+     * @param int $maxKilometre
+     */
+    public function setMaxKilometre(int $maxKilometre): void
+    {
+        $this->maxKilometre = $maxKilometre;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMinKilometre(): int
+    {
+        return $this->minKilometre;
+    }
+
+    /**
+     * @param int $minKilometre
+     */
+    public function setMinKilometre(int $minKilometre): void
+    {
+        $this->minKilometre = $minKilometre;
+    }
+
+
+}

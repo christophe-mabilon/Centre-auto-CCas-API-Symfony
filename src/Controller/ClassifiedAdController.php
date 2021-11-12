@@ -12,6 +12,7 @@ use App\Repository\GarageRepository;
 use App\Repository\ManufacturerRepository;
 use App\Repository\ModelRepository;
 use App\Repository\RegionRepository;
+use App\Repository\SearchRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,7 +41,7 @@ class ClassifiedAdController extends AbstractController
 
 
     /**
-     * @Route("/classifiedAds/user/findall/",name="classifiedAds_by_users", methods={"GET"})
+     * @Route("/classifiedAds/user/findall",name="classifiedAds_by_users", methods={"GET"})
      */
     public function findAllByUser(ClassifiedAdRepository $repo): Response
     {
@@ -87,7 +88,7 @@ class ClassifiedAdController extends AbstractController
     /**
      * @Route("/classifiedAd/add/", name="add_ClassifiedAd", methods={"POST"})
      */
-    public function add(Request $req, SerializerInterface $serializer, EntityManagerInterface $emi, UserRepository $userRepo, GarageRepository $garageRepo,
+    public function add(Request          $req, SerializerInterface $serializer, EntityManagerInterface $emi, UserRepository $userRepo, GarageRepository $garageRepo,
                         RegionRepository $regionRepo, BrandRepository $brandRepo, ModelRepository $modelRepo): Response
     {
         if (!$this->getUser()) {
@@ -96,13 +97,14 @@ class ClassifiedAdController extends AbstractController
         $isAdmin = in_array("ROLE_ADMIN", $this->getUser()->getRoles(), true);
 
         if ($isAdmin || $this->getUser()) {
+
             $classifiedAdJson = $req->getContent();
             $classifiedAd = $serializer->deserialize($classifiedAdJson, ClassifiedAd::class, 'json');
-            $brand = $brandRepo->findOneBy(["id" => $req->toArray('brand')]);
-            $model = $modelRepo->findOneBy(["id" => $req->toArray('model')]);
-            $region = $regionRepo->findOneBy(["id" => $req->toArray('region')]);
-            $garage = $garageRepo->findOneBy(["id" => $req->toArray('garage')]);
-            //$user = $userRepo->findOneBy(["id" => $req->toArray('user')]);
+            $data = $req->toArray();
+            $brand = $brandRepo->findOneBy(["id" => $data['brand']]);
+            $model = $modelRepo->findOneBy(["id" => $data['model']]);
+            $region = $regionRepo->findOneBy(["id" => $data['region']]);
+            $garage = $garageRepo->findOneBy(["id" => $data['garage']]);
             $classifiedAd->setUser($this->getUser());
             $classifiedAd->setBrand($brand);
             $classifiedAd->setModel($model);
@@ -121,35 +123,37 @@ class ClassifiedAdController extends AbstractController
     /**
      * @Route("/classifiedAds/update/{id}", name="update_classifiedAd", methods={"PATCH"}, requirements={"id":"\d+"})
      */
-    public function classifiedUpdate(Request $req, SerializerInterface $serializer, EntityManagerInterface $emi, UserRepository $userRepo, GarageRepository $garageRepo,
+    public function classifiedUpdate(Request          $req, SerializerInterface $serializer, EntityManagerInterface $emi, UserRepository $userRepo, GarageRepository $garageRepo,
                                      RegionRepository $regionRepo, BrandRepository $brandRepo, ModelRepository $modelRepo)
-    {{
-        if (!$this->getUser()) {
-            return $this->json(["Désolé vous n avez pas acces a cette information !", 200, []]);
-        }
-        $isAdmin = in_array("ROLE_ADMIN", $this->getUser()->getRoles(), true);
-        if ($isAdmin && $this->getUser()) {
-            $classifiedAdJson = $req->getContent();
-            $classifiedAd = $serializer->deserialize($classifiedAdJson, ClassifiedAd::class, 'json');
-            $brand = $brandRepo->findOneBy(["id" => $req->toArray('brand')]);
-            $model = $modelRepo->findOneBy(["id" => $req->toArray('model')]);
-            $region = $regionRepo->findOneBy(["id" => $req->toArray('region')]);
-            $garage = $garageRepo->findOneBy(["id" => $req->toArray('garage')]);
-            $user = $userRepo->findOneBy(["id" => $req->toArray('user')]);
-            $classifiedAd->setBrand($brand);
-            $classifiedAd->setModel($model);
-            $classifiedAd->setRegion($region);
-            $classifiedAd->setUser($user);
-            $classifiedAd->setGarage($garage);
-            $classifiedAd->setCreatedAt(new \DateTime());
-            $classifiedAd->setUpdatedOnAt(new \DateTime());
-            $emi->persist($classifiedAd);
-            $emi->flush();
-            return $this->json(["message" => "Votre annonce à bien été ajoutée !"], 200, []);
-        }
-        return $this->json(["message" => "Il semblerait qu 'il y a un un petit probleme merci de recommencer votre saisie"], 200, []);
+    {
+        {
+            if (!$this->getUser()) {
+                return $this->json(["Désolé vous n avez pas acces a cette information !", 200, []]);
+            }
+            $isAdmin = in_array("ROLE_ADMIN", $this->getUser()->getRoles(), true);
+            if ($isAdmin && $this->getUser()) {
+                $classifiedAdJson = $req->getContent();
+                $classifiedAd = $serializer->deserialize($classifiedAdJson, ClassifiedAd::class, 'json');
+                $data = $req->toArray();
+                $brand = $brandRepo->findOneBy(["id" => $data['brand']]);
+                $model = $modelRepo->findOneBy(["id" => $data['model']]);
+                $region = $regionRepo->findOneBy(["id" => $data['region']]);
+                $garage = $garageRepo->findOneBy(["id" => $data['garage']]);
+                $user = $userRepo->findOneBy(["id" => $data['user']]);
+                $classifiedAd->setBrand($brand);
+                $classifiedAd->setModel($model);
+                $classifiedAd->setRegion($region);
+                $classifiedAd->setUser($user);
+                $classifiedAd->setGarage($garage);
+                $classifiedAd->setCreatedAt(new \DateTime());
+                $classifiedAd->setUpdatedOnAt(new \DateTime());
+                $emi->persist($classifiedAd);
+                $emi->flush();
+                return $this->json(["message" => "Votre annonce à bien été ajoutée !"], 200, []);
+            }
+            return $this->json(["message" => "Il semblerait qu 'il y a un un petit probleme merci de recommencer votre saisie"], 200, []);
 
-    }
+        }
 
     }
 
@@ -172,10 +176,24 @@ class ClassifiedAdController extends AbstractController
     /**
      * @Route("/classifiedAds/count/brand", name="count_classifiedAdByBrand", methods={"GET"})
      */
-    public function count(ClassifiedAdRepository $repo): Response
+    /*public function count(ClassifiedAdRepository $repo): Response
     {
 
 
         return $this->json($totalclassifiedAdByBrand, 200, []);
+    }*/
+    /**
+     * @Route("/search", name="search_classifiedAd", methods={"POST"})
+     *
+     */
+    public function filterClassifiedAd(Request $req, ClassifiedAdRepository $repo): Response
+    {
+        $announces = "";
+        $searchData = $req->toArray();
+        $announces = $repo->findByFilter(
+            $searchData);
+
+        return $this->json($announces, 200, [], ["groups" => "classifiedAd"]);
     }
+
 }

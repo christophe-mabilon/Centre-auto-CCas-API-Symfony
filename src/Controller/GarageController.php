@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use App\Repository\GarageRepository;
 use phpDocumentor\Reflection\Types\Integer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -106,7 +107,7 @@ class GarageController extends AbstractController
     /**
      * @Route("/garage/update/{id}", name="update_garage", methods={"PATCH"}, requirements={"id":"\d+"})
      */
-    public function update(Request                $req, Garage $garage, UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
+    public function update(Request $req, Garage $garage, UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
                            EntityManagerInterface $manager, $id): Response
     {
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
@@ -161,24 +162,31 @@ class GarageController extends AbstractController
     }
 
     /**
-     * @Route("/photos/", name="photos", methods={"POST"})
+     * @Route("/photos", name="Upload_photos", methods={"POST"})
      *
      */
-    public function getPhotos(Request $req,GarageRepository $garageRepo,Garage $garage )
+    public function postPhotos(Request $req):Response
     {
+        $photo = $req->files->get('image');
+        if ($photo) {
+            try {
+                // On cree un nom unique pour cette image avec uniqueId() et on gere son extention avec gessExtension
+                $nouveauNomImage = uniqid('', true) . "." . $photo->guessExtension();
+                //déplace l'image du dossier tmp dans le repertoire public/uploads/images/festivals
+                $photo->move(
+                //chemin cible ( c est le chemin par défaut dans config/services.yaml )
+                    $this->getParameter('images_vehicules'),
+                    //nom de la cible (nouvelle adresse)
+                    $nouveauNomImage
+                );
+            } catch (FileException $e) {
+                throw $e;
 
-        if (!$this->getUser()) {
-            return $this->json(["Désolé vous n avez pas acces a cette information !", 200, []]);
-        }
+                }
 
-        $isAdmin = in_array("ROLE_ADMIN", $this->getUser()->getRoles(), true);
-
-        $formulaire = $this->createForm(FestivalType::class, $garage);
-        $formulaire->handleRequest($req);
-        $imageEnvoyee = $formulaire->get('url')->getData(); dd($imageEnvoyee);
+        } return $this->json($nouveauNomImage, 200);
     }
 }
-
 
 
 

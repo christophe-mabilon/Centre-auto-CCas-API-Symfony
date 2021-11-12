@@ -19,7 +19,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class AdminController extends AbstractController
 {
-
     /**
      *
      * @Route("/searchAll", name="search_All_Users",methods={"GET"})
@@ -69,24 +68,29 @@ class AdminController extends AbstractController
     public function register(Request $req, SerializerInterface $serializer, EMI $manager, UserPasswordHasherInterface $hasher): Response
     {
         if (!$this->getUser()) {
-            dd($this->getUser());
-            return $this->json(["message" => "Desolé mais vous n'avez pas acces a cette page !"], 200, []);
-        }
+        return $this->json(["message" => "Desolé mais vous n'avez pas acces a cette page !"], 200, []);
+    }
         $user = $this->getUser();
+        $isAdmin = in_array("ROLE_ADMIN", $user->getRoles(), true);
         //// seulement un admin peut avoir acces a ce controller
-        if (in_array("ROLE_ADMIN", $user->getRoles(), true)) {
-            $jsonRecu = $req->getContent();
-            $user = $serializer->deserialize($jsonRecu, User::class, 'json');
+        if ($isAdmin) {
+
+            $user = $serializer->deserialize($req->getContent(), User::class, 'json');
             if ($user->getPassword() !== $user->getPasswordConfirm()) {
                 return $this->json(['message' => 'Les mots de passe ne corespondent pas'], 200, []);
             }
             if ($user->getPassword() === $user->getPasswordConfirm()) {
                 $user->setUsename($user->getUsername());
+                $user->setTitle($user->getTitle());
                 $hasedPasword = $hasher->hashPassword($user, $user->getPassword());
-                //$user->setEmail($user->getEmail());
+                $user->setEmail($user->getEmail());
                 $user->setPassword($hasedPasword);
                 $user->setDateOfRegistration(new DateTime());
                 $user->setUpdatedOn(new DateTime());
+                $user->setSociety($user->getSociety());
+                $user->setAdresse($user->getAdresse());
+                $user->setCodePostal($user->getCodePostal());
+                $user->setVille($user->getVille());
                 $user->setRoles(["ROLE_USER"]);
                 $manager->persist($user);
                 $manager->flush();
@@ -103,18 +107,18 @@ class AdminController extends AbstractController
     public function edit(Request $req, SerializerInterface $serializer, EMI $manager,
                          UserPasswordHasherInterface $hasher,User $user, $id): Response
     {
+
         if (!$this->getUser()) {
             return $this->json(["message" => "Desolé mais vous n'avez pas acces a cette page !"], 200, []);
         }
         $currentUser = $this->getUser();
-
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
         //seulement un admin peut avoir acces a ce controller
         if ($isAdmin) {
             $jsonUser = $req->getContent();
             $userEdit = $serializer->deserialize($jsonUser, User::class, 'json');
-            //$hashedPassword = $hasher->hashPassword($user, $user->getPassword());
-            //$user->setPassword($hashedPassword);
+            $hashedPassword = $hasher->hashPassword($user, $user->getPassword());
+            $user->setPassword($hashedPassword);
             $user->setTitle($userEdit->getTitle());
             $user->setFirstName($userEdit->getfirstName());
             $user->setLastName($userEdit->getLastName());
@@ -122,6 +126,10 @@ class AdminController extends AbstractController
             $user->setEmail($userEdit->getEmail());
             $user->setPhoneNumber($userEdit->getPhoneNumber());
             $user->setSiret($userEdit->getSiret());
+            $user->setSociety($userEdit->getSociety());
+            $user->setAdresse($userEdit->getAdresse());
+            $user->setCodePostal($userEdit->getCodePostal());
+            $user->setVille($userEdit->getVille());
             if(!empty($userEdit->getPassword()) && !$userEdit->getPassword()==""){
                 if($userEdit->getPassword() ===$userEdit->getPasswordConfirm())
                 {
@@ -133,7 +141,12 @@ class AdminController extends AbstractController
             }
             $user->setUpdatedOn(new DateTime());
             $user->setdateOfRegistration(new DateTime());
-            $user->setRoles(["ROLE_USER"]);
+            if(in_array("ROLE_ADMIN", $currentUser->getRoles(), true)){
+                $user->setRoles(["ROLE_ADMIN"]);
+            }else{
+                $user->setRoles(["ROLE_USER"]);
+            }
+
             $manager->persist($user);
             $manager->flush();
             $message = ["message" => "Utilisateur mis a jour!"];
@@ -156,7 +169,6 @@ class AdminController extends AbstractController
         $user = $this->getUser();
         $isAdmin = in_array("ROLE_ADMIN", $user->getRoles(), true);
         if ($isAdmin) {
-
             $deletedUser = $repo->findBy(["id" => $id]);
             $manager->remove($deletedUser[0]);
             $manager->flush();
