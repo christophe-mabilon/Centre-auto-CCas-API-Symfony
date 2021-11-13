@@ -176,12 +176,20 @@ class ClassifiedAdController extends AbstractController
     /**
      * @Route("/classifiedAds/count/brand", name="count_classifiedAdByBrand", methods={"GET"})
      */
-    /*public function count(ClassifiedAdRepository $repo): Response
+    public function count(ClassifiedAdRepository $repo): Response
     {
+        $selectedMarque = [];
+        $nombre = 0;
+        $totalclassifiedAd = $repo->findAll();
+        for ($i=0, $iMax = count($totalclassifiedAd); $i < $iMax; $i++){
+            if(!in_array($totalclassifiedAd[$i]->getBrand()->getid(), $selectedMarque, true)){
 
+                $selectedMarque[$totalclassifiedAd[$i]->getBrand()->getname()] = count($repo->findBy(['brand'=>$totalclassifiedAd[$i]->getBrand()->getid()]));
+            }
+        }
+        return $this->json($selectedMarque, 200, [], ["groups" => "countAnnonces"]);
+    }
 
-        return $this->json($totalclassifiedAdByBrand, 200, []);
-    }*/
     /**
      * @Route("/search", name="search_classifiedAd", methods={"POST"})
      *
@@ -190,10 +198,7 @@ class ClassifiedAdController extends AbstractController
     {
         $announces = "";
         $searchData = $req->toArray();
-        $announces = $repo->findByFilter(
-            $searchData);
-
+        $announces = $repo->findByFilter($searchData);
         return $this->json($announces, 200, [], ["groups" => "classifiedAd"]);
     }
-
 }

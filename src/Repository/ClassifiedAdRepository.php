@@ -20,64 +20,55 @@ class ClassifiedAdRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ClassifiedAd::class);
     }
-    public function findByFilter($searchData){
+
+
+    /**
+     * Recheche de vehicules selont les critéres
+     *
+     *
+     */
+     public function findByFilter($searchData){
         $parameters = new ArrayCollection();
         $qb = $this->createQueryBuilder('a');
         /* filter brand */
-        if($searchData['brand'] = ""){
-            $qb->andWhere('a.brand = 1');
-            $parameters->add(new Parameter('brand', 1));
-        }else if($searchData['brand'] >0 ) {
+        if($searchData['brand']>0) {
             $qb->andWhere('a.brand = :brand');
             $parameters->add(new Parameter('brand', $searchData['brand']));
         }
         /* filter model */
-        if($searchData['model'] = ""){
-            $qb->andWhere('a.model = 1');
-            $parameters->add(new Parameter('model', 1));
-        }else if($searchData['model'] >0){
+        if($searchData['model']>0){
             $qb->andWhere('a.model = :model');
             $parameters->add(new Parameter('model', $searchData['model']));
         }
         /* filter region */
-        if($searchData['region'] = ""){
-            $qb->andWhere('a.region = 1');
-            $parameters->add(new Parameter('region', 1));
-        }else if($searchData['region'] >0){
+        if($searchData['region']){
             $qb->andWhere('a.region = :region');
             $parameters->add(new Parameter('region', $searchData['region']));
         }
         /* filter fuel */
-        if($searchData['fuel'] = ""){
-            $qb->andWhere('a.fuel = 1');
-            $parameters->add(new Parameter('fuel', 1));
-        }else if($searchData['fuel']>0){
+        if(!empty($searchData['fuel'])){
             $qb->andWhere('a.fuel = :fuel');
             $parameters->add(new Parameter('fuel', $searchData['fuel']));
         }
         /* filter typeOfVehicle */
-        if($searchData['typeOfVehicle'] = ""){
-            $qb->andWhere('a.typeOfVehicle = 1');
-            $parameters->add(new Parameter('typeOfVehicle', 1));
-        }else if($searchData['typeOfVehicle']>0){
+        if(!empty($searchData['typeOfVehicle'])){
             $qb->andWhere('a.typeOfVehicle = :typeOfVehicle');
             $parameters->add(new Parameter('typeOfVehicle', $searchData['typeOfVehicle']));
         }
         /* filter gearbox */
-        if($searchData['gearbox'] = ""){
-            $qb->andWhere('a.gearbox = 1');
-            $parameters->add(new Parameter('gearbox', 1));
-        }else if($searchData['gearbox']>0){
+        if(!empty($searchData['gearbox'])){
             $qb->andWhere('a.gearbox = :gearbox');
             $parameters->add(new Parameter('gearbox', $searchData['gearbox']));
         }
         /* filter places */
-        if($searchData['places'] = ""){
-            $qb->andWhere('a.places = 1');
-            $parameters->add(new Parameter('places', 1));
-        }else if($searchData['places']>0){
+        if(!empty($searchData['places'])){
             $qb->andWhere('a.places = :places');
             $parameters->add(new Parameter('places', $searchData['places']));
+        }
+        /* filter places */
+        if(!empty($searchData['carDoors'])){
+            $qb->andWhere('a.carDoors = :carDoors');
+            $parameters->add(new Parameter('carDoors', $searchData['carDoors']));
         }
         /* filter minKilometre */
         if($searchData['minKilometre']>=0){

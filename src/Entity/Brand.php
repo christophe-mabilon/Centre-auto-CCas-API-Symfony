@@ -28,6 +28,7 @@ class Brand
      * @Groups({"classifiedAdById"})
      * @Groups({"brand"})
      * @Groups({"model"})
+     * @Groups ({"countAnnonces"})
      */
     private $name;
 

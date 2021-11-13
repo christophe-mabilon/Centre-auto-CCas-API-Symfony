@@ -57,12 +57,12 @@ class ClassifiedAd
     private string $description;
 
     /**
-     *
+     * @var integer
      */
-    private string $minPrice;
+    private int $minPrice;
 
     /**
-     *
+     * @var integer
      */
     private int $maxPrice;
 
@@ -169,7 +169,7 @@ class ClassifiedAd
      * @Groups({"classifiedAdById"})
      * @Groups({"users"})
      */
-    private array $photos = [];
+    private array $photos;
 
     /**
      * @ORM\ManyToOne(targetEntity=Model::class, inversedBy="classifiedAds",cascade={"persist"})
@@ -276,6 +276,7 @@ class ClassifiedAd
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
      * @Groups ({"users"})
+     * @Groups ({"countAnnonces"})
      */
     private $brand;
 

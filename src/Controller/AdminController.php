@@ -104,8 +104,8 @@ class AdminController extends AbstractController
      * //Update uniquement pour l'admin
      * @Route("/edit/{id}", name="admin_update_user", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function edit(Request $req, SerializerInterface $serializer, EMI $manager,
-                         UserPasswordHasherInterface $hasher,User $user, $id): Response
+    public function edit(User $user ,Request $req, SerializerInterface $serializer, EMI $manager,
+                         UserPasswordHasherInterface $hasher): Response
     {
 
         if (!$this->getUser()) {
@@ -115,10 +115,7 @@ class AdminController extends AbstractController
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
         //seulement un admin peut avoir acces a ce controller
         if ($isAdmin) {
-            $jsonUser = $req->getContent();
-            $userEdit = $serializer->deserialize($jsonUser, User::class, 'json');
-            $hashedPassword = $hasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($hashedPassword);
+            $userEdit = $serializer->deserialize($req->getContent(), User::class, 'json');
             $user->setTitle($userEdit->getTitle());
             $user->setFirstName($userEdit->getfirstName());
             $user->setLastName($userEdit->getLastName());
@@ -131,10 +128,11 @@ class AdminController extends AbstractController
             $user->setCodePostal($userEdit->getCodePostal());
             $user->setVille($userEdit->getVille());
             if(!empty($userEdit->getPassword()) && !$userEdit->getPassword()==""){
-                if($userEdit->getPassword() ===$userEdit->getPasswordConfirm())
+                if($userEdit->getPassword() === $userEdit->getPasswordConfirm())
                 {
-                    $user->setPaswword($userEdit->getPaswword());
-                    $user->setPaswwordConfirm($userEdit->getPaswwordConfirm());
+                    $hashedPassword = $hasher->hashPassword($userEdit, $userEdit->getPassword());
+                    $user->setPassword($hashedPassword);
+
                 }else{
                     return $this->json(["message" => "Les mots de passe doivent correspondre!"]);
                 }

@@ -37,9 +37,10 @@ class Garage
 
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="json")
+     * @Groups({"garages"})
      */
-    private ?string $imageGarage;
+    private array $imageGarage;
 
 
     /**
@@ -146,23 +147,7 @@ class Garage
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getImageGarage(): ?string
-    {
-        return $this->imageGarage;
-    }
 
-    /**
-     * @param string|null $imageGarage
-     * @return Garage
-     */
-    public function setImageGarage(?string $imageGarage): Garage
-    {
-        $this->imageGarage = $imageGarage;
-        return $this;
-    }
 
     /**
      * @return int
@@ -324,6 +309,22 @@ class Garage
     {
         $this->updatedOnAt = $updatedOnAt;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getImageGarage(): array
+    {
+        return $this->imageGarage;
+    }
+
+    /**
+     * @param array $imageGarage
+     */
+    public function setImageGarage(array $imageGarage): void
+    {
+        $this->imageGarage = $imageGarage;
     }
 
 
