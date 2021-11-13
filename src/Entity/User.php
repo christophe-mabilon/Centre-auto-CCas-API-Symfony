@@ -40,8 +40,8 @@ class User implements UserInterface
      * @Assert\Length(
      *      min = 4,
      *      max = 16,
-     *      minMessage = "Your first name must be at least {{ limit }} characters long",
-     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     *      minMessage = "Votre nom d'utilisateur doit avoir 4 caracteres minimum",
+     *      maxMessage = "Votre nom d'utilisateur doit avoir 16 caracteres maximum"
      * )
      * @Groups({"classifiedAd"})
      * @Groups({"classifiedAdById"})
@@ -58,15 +58,16 @@ class User implements UserInterface
      * @Assert\Length(
      *      min = 4,
      *      max = 16,
-     *      minMessage = "Your first name must be at least {{ limit }} characters long",
-     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters")
+     *      minMessage = "Votre mot de passe doit contenir 4 caracteres minimum",
+     *      maxMessage = "Votre mot de passe doit contenir 4 caracteres maximum")
      *
      *
      */
     private ?string $password;
 
-    //confirmation de mot de passe
+
     /**
+     * confirmation de mot de passe
      * @Assert\NotBlank()
      * @Assert\EqualTo(propertyPath="password",message="les mots de passe doivent correspondre !")
      *
@@ -388,21 +389,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getRoles():array
-    {
-        $roles = $this->roles;
-        $roles[] = "ROLE_USER";
-        return array_unique($roles);
 
-        // TODO: Implement getRoles() method.
-    }
-
-    public function setRoles(?array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
 
     /**
      * @return Collection
@@ -458,11 +445,26 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getRoles():array
+    {
+        $roles = $this->roles;
+        $roles[] = "ROLE_USER";
+        return array_unique($roles);
+
+       
+    }
+
+    public function setRoles(?array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
 
     public function getSalt():string
     {
-        $salt = "le_sel_de_mon_application";
-        return $salt;
+        return $salt = "le_sel_de_mon_application";
+
     }
 
     public function eraseCredentials()
