@@ -451,7 +451,7 @@ class User implements UserInterface
         $roles[] = "ROLE_USER";
         return array_unique($roles);
 
-       
+
     }
 
     public function setRoles(?array $roles): self
@@ -469,12 +469,11 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
-        // TODO: Implement eraseCredentials() method.
+
     }
 
     public function __call($name, $arguments)
     {
-        // TODO: Implement @method string getUserIdentifier()
     }
 
     public function getUser(array $toArray)
