@@ -188,6 +188,7 @@ class ClassifiedAdController extends AbstractController
             }
         }
         return $this->json($selectedMarque, 200, [], ["groups" => "countAnnonces"]);
+
     }
 
     /**
