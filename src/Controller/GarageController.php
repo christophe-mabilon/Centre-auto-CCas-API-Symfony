@@ -107,7 +107,7 @@ class GarageController extends AbstractController
     /**
      * @Route("/garage/update/{id}", name="update_garage", methods={"PATCH"}, requirements={"id":"\d+"})
      */
-    public function update(Request $req, Garage $garage, UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
+    public function update(Request $req, UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
                            EntityManagerInterface $manager, $id): Response
     {   $userCanEdit = false;
 
@@ -119,15 +119,15 @@ class GarageController extends AbstractController
         if ($isAdmin || $userCanEdit) {
             $jsonRecu = $req->getContent();
             $jsonRecu = $serializer->deserialize($jsonRecu, Garage::class, 'json');
-            $garage = $repo->findBy(["id" =>$id]);dd($garage);
-            $garage->setName($jsonRecu->getName());
-            $garage->setstreetNumber($jsonRecu->getStreetNumber());
-            $garage->setstreetName($jsonRecu->getStreetName());
-            $garage->setAddress($jsonRecu->getAddress());
-            $garage->setPostalCode($jsonRecu->getPostalCode());
-            $garage->setCity($jsonRecu->getCity());
-            $garage->setUpdatedOnAt(new \DateTime());
-            $manager->persist($garage);
+            $currentGarage = $repo->findBy(["id" =>$id]);dd($currentGarage);
+            $currentGarage->setName($jsonRecu->getName());
+            $currentGarage->setstreetNumber($jsonRecu->getStreetNumber());
+            $currentGarage->setstreetName($jsonRecu->getStreetName());
+            $currentGarage->setAddress($jsonRecu->getAddress());
+            $currentGarage->setPostalCode($jsonRecu->getPostalCode());
+            $currentGarage->setCity($jsonRecu->getCity());
+            $currentGarage->setUpdatedOnAt(new \DateTime());
+            $manager->persist($currentGarage);
             $manager->flush();
             return $this->json(["Le garage a éte modifié avec succes !"], 200);
         }
