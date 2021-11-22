@@ -139,11 +139,10 @@ class ClassifiedAdController extends AbstractController
                 $model = $modelRepo->findOneBy(["id" => $data['model']]);
                 $region = $regionRepo->findOneBy(["id" => $data['region']]);
                 $garage = $garageRepo->findOneBy(["id" => $data['garage']]);
-                $user = $userRepo->findOneBy(["id" => $data['user']]);
+                $user = $userRepo->findOneBy(["id" => $data['userId']]);
                 $classifiedAd->setBrand($brand);
                 $classifiedAd->setModel($model);
                 $classifiedAd->setRegion($region);
-                $classifiedAd->setUser($this->getuser());
                 $classifiedAd->setGarage($garage);
                 $classifiedAd->setCreatedAt(new \DateTime());
                 $classifiedAd->setUpdatedOnAt(new \DateTime());
