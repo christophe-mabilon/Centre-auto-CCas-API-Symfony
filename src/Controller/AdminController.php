@@ -110,7 +110,7 @@ class AdminController extends AbstractController
             return $this->json(["message" => "Desolé mais vous n'avez pas acces a cette page !"], 200, []);
         }
         $currentUser = $this->getUser();
-        if($user->getId() === $id){
+        if($user->getId() === (int)$id){
             $userCanEdit =true;
         }
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
