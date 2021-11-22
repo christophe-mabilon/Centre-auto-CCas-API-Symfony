@@ -20,9 +20,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class AdminController extends AbstractController
 {
     /**
-     *
-     * @Route("/searchAll", name="search_All_Users",methods={"GET"})
-     *
+     * @Route("/searchAll", name="search_All_Users",methods={"GET"})     *
      */
     public function searchAllUsers(UserRepository $repo): Response
     {

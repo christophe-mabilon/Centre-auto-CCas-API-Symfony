@@ -123,7 +123,7 @@ class ClassifiedAdController extends AbstractController
     /**
      * @Route("/classifiedAds/update/{id}", name="update_classifiedAd", methods={"PATCH"}, requirements={"id":"\d+"})
      */
-    public function classifiedUpdate(Request          $req, SerializerInterface $serializer, EntityManagerInterface $emi, UserRepository $userRepo, GarageRepository $garageRepo,
+    public function classifiedUpdate(Request $req, SerializerInterface $serializer, EntityManagerInterface $emi, UserRepository $userRepo, GarageRepository $garageRepo,
                                      RegionRepository $regionRepo, BrandRepository $brandRepo, ModelRepository $modelRepo)
     {
         {
@@ -131,7 +131,7 @@ class ClassifiedAdController extends AbstractController
                 return $this->json(["Désolé vous n avez pas acces a cette information !", 200, []]);
             }
             $isAdmin = in_array("ROLE_ADMIN", $this->getUser()->getRoles(), true);
-            if ($isAdmin && $this->getUser()) {
+            if ($isAdmin || $this->getUser()) {
                 $classifiedAdJson = $req->getContent();
                 $classifiedAd = $serializer->deserialize($classifiedAdJson, ClassifiedAd::class, 'json');
                 $data = $req->toArray();

@@ -21,11 +21,8 @@ class ClassifiedAdRepository extends ServiceEntityRepository
         parent::__construct($registry, ClassifiedAd::class);
     }
 
-
     /**
      * Recheche de vehicules selont les critéres
-     *
-     *
      */
      public function findByFilter($searchData){
         $parameters = new ArrayCollection();
