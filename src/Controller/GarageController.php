@@ -109,10 +109,11 @@ class GarageController extends AbstractController
      */
     public function update(Request $req, Garage $garage, UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
                            EntityManagerInterface $manager,User $user, $id): Response
-    {
+    {   $userCanEdit = false;
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
         if($user->getId() === (int)$id){
-            $userCanEdit =true;
+            $userCanEdit = true;
+            dd('ok can edit');
         }
         if ($isAdmin || $userCanEdit) {
             $garage = $repo->findOneBy(["id" => $id]);
