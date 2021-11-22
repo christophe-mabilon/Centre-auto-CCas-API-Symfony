@@ -120,6 +120,7 @@ class GarageController extends AbstractController
             $garage = $repo->findOneBy(["id" => $id]);
             $garage->setName($jsonRecu->getName());
             $garage->setstreetNumber($jsonRecu->getStreetNumber());
+            $garage->setstreetName($jsonRecu->getStreetName());
             $garage->setAddress($jsonRecu->getAddress());
             $garage->setPostalCode($jsonRecu->getPostalCode());
             $garage->setCity($jsonRecu->getCity());
