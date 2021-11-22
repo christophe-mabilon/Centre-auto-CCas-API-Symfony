@@ -114,7 +114,7 @@ class GarageController extends AbstractController
         $jsonRecu = $serializer->deserialize($jsonRecu, Garage::class, 'json');
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
 
-        dd($garage->getUser());
+        dd($garage->$this->getUser());
         if($garage->getUser()->getId() === (int)$id){
             $userCanEdit = true;
             dd('ok can edit');
