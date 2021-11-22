@@ -111,7 +111,7 @@ class GarageController extends AbstractController
                            EntityManagerInterface $manager,User $user, $id): Response
     {   $userCanEdit = false;
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
-        if($user->getId() === (int)$id){
+        if($garage->getUser()->getId() === (int)$id){
             $userCanEdit = true;
             dd('ok can edit');
         }
