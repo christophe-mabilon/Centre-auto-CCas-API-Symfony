@@ -103,14 +103,14 @@ class AdminController extends AbstractController
      * @Route("/edit/{id}", name="admin_update_user", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function edit(User $user ,Request $req, SerializerInterface $serializer, EMI $manager,
-                         UserPasswordHasherInterface $hasher): Response
+                         UserPasswordHasherInterface $hasher,$id): Response
     {
 
         if (!$this->getUser()) {
             return $this->json(["message" => "Desolé mais vous n'avez pas acces a cette page !"], 200, []);
         }
         $currentUser = $this->getUser();
-        if($user->getId() === $currentUser->getId()){
+        if($user->getId() === $id){
             $userCanEdit =true;
         }
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
