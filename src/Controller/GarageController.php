@@ -115,20 +115,21 @@ class GarageController extends AbstractController
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
         $user = $this->getUser();
         $userGarage = $garage->getUser();
+        dd($userGarage);
         if($userGarage === $user){
             $userCanEdit = true;
         }
         if ($isAdmin || $userCanEdit) {
 
-            $currentGarage = $repo->findBy(["id" =>$id]);dd($currentGarage);
-            $currentGarage->setName($jsonRecu->getName());
-            $currentGarage->setstreetNumber($jsonRecu->getStreetNumber());
-            $currentGarage->setstreetName($jsonRecu->getStreetName());
-            $currentGarage->setAddress($jsonRecu->getAddress());
-            $currentGarage->setPostalCode($jsonRecu->getPostalCode());
-            $currentGarage->setCity($jsonRecu->getCity());
-            $currentGarage->setUpdatedOnAt(new \DateTime());
-            $manager->persist($currentGarage);
+            $garage = $repo->findBy(["id" =>$id]);
+            $garage->setName($jsonRecu->getName());
+            $garage->setstreetNumber($jsonRecu->getStreetNumber());
+            $garage->setstreetName($jsonRecu->getStreetName());
+            $garage->setAddress($jsonRecu->getAddress());
+            $garage->setPostalCode($jsonRecu->getPostalCode());
+            $garage->setCity($jsonRecu->getCity());
+            $garage->setUpdatedOnAt(new \DateTime());
+            $manager->persist($garage);
             $manager->flush();
             return $this->json(["Le garage a éte modifié avec succes !"], 200);
         }
