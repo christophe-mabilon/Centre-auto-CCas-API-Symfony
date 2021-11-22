@@ -107,7 +107,7 @@ class GarageController extends AbstractController
     /**
      * @Route("/garage/update/{id}", name="update_garage", methods={"PATCH"}, requirements={"id":"\d+"})
      */
-    public function update(Request $req, UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
+    public function update(Request $req,Garage $garage,UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
                            EntityManagerInterface $manager, $id): Response
     {   $userCanEdit = false;
         $jsonRecu = $req->getContent();
