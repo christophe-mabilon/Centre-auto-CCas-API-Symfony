@@ -118,7 +118,7 @@ class GarageController extends AbstractController
         if ($isAdmin || $userCanEdit) {
             $jsonRecu = $req->getContent();
             $jsonRecu = $serializer->deserialize($jsonRecu, Garage::class, 'json');dd($repo->findOneBy(["id" => $id]));
-            $garage = $repo->findOneBy(["id" => $id]);
+            $garage = $repo->findOneBy([$jsonRecu => "garageId"]);
             $garage->setName($jsonRecu->getName());
             $garage->setstreetNumber($jsonRecu->getStreetNumber());
             $garage->setstreetName($jsonRecu->getStreetName());
