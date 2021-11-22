@@ -110,9 +110,12 @@ class AdminController extends AbstractController
             return $this->json(["message" => "Desolé mais vous n'avez pas acces a cette page !"], 200, []);
         }
         $currentUser = $this->getUser();
+        if($user->getId() === $currentUser->getId()){
+            $userCanEdit =true;
+        }
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
-        //seulement un admin peut avoir acces a ce controller
-        if ($isAdmin) {
+        //seulement un adminou l'utilsateur peut avoir acces a ce controller
+        if ($isAdmin || $userCanEdit) {
             $userEdit = $serializer->deserialize($req->getContent(), User::class, 'json');
             $user->setTitle($userEdit->getTitle());
             $user->setFirstName($userEdit->getfirstName());
