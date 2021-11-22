@@ -116,8 +116,8 @@ class GarageController extends AbstractController
         if($this->getUser()->getId() === (int)$id){
             $userCanEdit = true;
         }
-        if ($isAdmin || $userCanEdit) {
-            $garage = $repo->findOneBy(["id" => $id]);dd($garage);
+        if ($isAdmin || $userCanEdit) {dd($repo->findOneBy(["id" => $id]));
+            $garage = $repo->findOneBy(["id" => $id]);
             $garage->setName($jsonRecu->getName());
             $garage->setstreetNumber($jsonRecu->getStreetNumber());
             $garage->setstreetName($jsonRecu->getStreetName());
