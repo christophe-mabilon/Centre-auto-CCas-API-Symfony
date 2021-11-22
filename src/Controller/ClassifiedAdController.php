@@ -143,7 +143,7 @@ class ClassifiedAdController extends AbstractController
                 $classifiedAd->setBrand($brand);
                 $classifiedAd->setModel($model);
                 $classifiedAd->setRegion($region);
-                $classifiedAd->setUser($user);
+                $classifiedAd->setUser($this->getuser());
                 $classifiedAd->setGarage($garage);
                 $classifiedAd->setCreatedAt(new \DateTime());
                 $classifiedAd->setUpdatedOnAt(new \DateTime());
