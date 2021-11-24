@@ -105,7 +105,7 @@ class GarageController extends AbstractController
     //seulement le proprietaire du garage ou l'admin peut modifier un garage
 
     /**
-     * @Route("/garage/update/{id}", name="update_garage", methods={"PATCH"}, requirements={"id":"\d+"})
+     * @Route("/garage/update/{garageId}", name="update_garage", methods={"PATCH"}, requirements={"id":"\d+"})
      */
     public function update(Request $req, UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
                            EntityManagerInterface $manager, $garageId): Response
