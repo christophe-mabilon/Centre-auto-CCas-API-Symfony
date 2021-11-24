@@ -107,14 +107,14 @@ class GarageController extends AbstractController
     /**
      * @Route("/garage/update/{garageId}", name="update_garage", methods={"PATCH"}, requirements={"id":"\d+"})
      */
-    public function update(Request $req, UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
+    public function update(Request $req,Garage $garage, UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
                            EntityManagerInterface $manager, $garageId): Response
     {   $userCanEdit = false;
 
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
-        $userGarage = $this->getUser()->getgGarage();
-        dd($userGarage);
-        if(in_array($garageId,$userGarage)){
+        $user = $this->getUser();
+        $userGarage = $garage->getUser();
+        if()){
             $userCanEdit = true;
         }
 
