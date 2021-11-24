@@ -113,6 +113,7 @@ class GarageController extends AbstractController
 
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
         $userGarage = $this->getUser()->getgGarage();
+        dd($userGarage);
         if(in_array($garageId,$userGarage)){
             $userCanEdit = true;
         }
