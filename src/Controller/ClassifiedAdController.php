@@ -113,6 +113,7 @@ class ClassifiedAdController extends AbstractController
             $classifiedAd->setModel($model);
             $classifiedAd->setRegion($region);
             $classifiedAd->setGarage($garage);
+            $classifiedAd->setTypeOfVehicle();
             $classifiedAd->setCreatedAt(new \DateTime());
             $classifiedAd->setUpdatedOnAt(new \DateTime());
             $emi->persist($classifiedAd);
