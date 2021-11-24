@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\GarageRepository", repositoryClass=GarageRepository::class)
+ * @ORM\Entity(repositoryClass=GarageRepository::class)
  *
  */
 class Garage
