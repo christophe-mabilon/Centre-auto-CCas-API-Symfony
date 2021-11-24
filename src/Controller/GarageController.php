@@ -108,7 +108,7 @@ class GarageController extends AbstractController
      * @Route("/garage/update/{id}", name="update_garage", methods={"PUT"}, requirements={"id":"\d+"})
      */
     public function update(Garage $garage,Request $req, UserInterface $currentUser, GarageRepository $repo, SerializerInterface $serializer,
-                           EntityManagerInterface $manager): Response
+                           EntityManagerInterface $manager,$id): Response
     {   $userCanEdit = false;
 
         $isAdmin = in_array("ROLE_ADMIN", $currentUser->getRoles(), true);
@@ -116,13 +116,12 @@ class GarageController extends AbstractController
         $userGarage = $garage->getUser();
         if($user == $userGarage){
             $userCanEdit = true;
-            dd($userCanEdit);
         }
 
         if ($isAdmin || $userCanEdit) {
             $jsonRecu = $req->getContent();
             $jsonRecu = $serializer->deserialize($jsonRecu, Garage::class, 'json');
-            //$garage = $repo->findOneBy(["id" => $garageId]);
+            $garage = $repo->findOneBy(["id" => $id]);
             $garage->setName($jsonRecu->getName());
             $garage->setstreetNumber($jsonRecu->getStreetNumber());
             $garage->setstreetName($jsonRecu->getStreetName());
