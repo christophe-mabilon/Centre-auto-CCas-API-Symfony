@@ -49,8 +49,11 @@ class ClassifiedAdController extends AbstractController
             return $this->json(["Désolé vous n avez pas acces a cette information !", 200, []]);
         }
         $isAdmin = in_array("ROLE_ADMIN", $this->getUser()->getRoles(), true);
-        if ($isAdmin || $this->getUser()) {
+        if ($this->getUser()) {
             $announce = $repo->findBy(["user" => $this->getUser()->getId()], ["garage" => "ASC"]);
+        }
+        if($isAdmin){
+            $announce = $repo->findAll();
         }
         return $this->json($announce, 200, [], ["groups" => "classifiedAdById"]);
     }
